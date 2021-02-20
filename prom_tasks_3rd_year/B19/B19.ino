@@ -7,10 +7,10 @@
 #define C 10
 #define D 11
 
-#define DIG_4 2
-#define DIG_3 3
-#define DIG_2 4
-#define DIG_1 5
+#define DIG_1 2
+#define DIG_2 3
+#define DIG_3 4
+#define DIG_4 5
 
 #define MAX 20
 #define MIN 2
@@ -89,6 +89,7 @@ void setup() {
   hardtest();
   randomSeed(analogRead(5));
   count = random(6);
+  Serial.println("Unesite vase kombinacije: ");
 }
 
 void loop() {
@@ -124,7 +125,7 @@ void loop() {
         Serial.println("srecnih dobitnika");
       }
       else {
-        Serial.print("Na zalost ovaj put nema srecnih dobitnika. Vise srece drugi put");
+        Serial.println("Na zalost ovaj put nema srecnih dobitnika. Vise srece drugi put");
       }
       Serial.print("Dobitna kombinacija: ");
       Serial.println(kombinacija);
