@@ -3,7 +3,7 @@
 #define LEVO 4
 #define DESNO 5
 #define LED 7
-#define POT 9
+#define POT A0
 #define BUZZ 10
 
 #define MOTOR_A_EN 5
@@ -25,10 +25,14 @@ unsigned long Time;
 bool buzz = true;
 
 void updateBTN() {
-  if (digitalRead(NAPRED) == HIGH) napred = true;
-  if (digitalRead(NAZAD) == HIGH) nazad = true;
-  if (digitalRead(LEVO) == HIGH) levo = true;
-  if (digitalRead(DESNO) == HIGH) desno = true;
+  if (digitalRead(NAPRED) == LOW) napred = true;
+  else napred = false;
+  if (digitalRead(NAZAD) == LOW) nazad = true;
+  else nazad = false;
+  if (digitalRead(LEVO) == LOW) levo = true;
+  else levo = false;
+  if (digitalRead(DESNO) == LOW) desno = true;
+  else desno = false;
 }
 
 void set_BTN_Direction() {
@@ -48,25 +52,12 @@ void set_motor(bool a1, bool a2, bool b1, bool b2) {
 }
 
 void set_Motor_Direction() {
-  if (levo || desno) {
-    set_motor(1, 0, 1, 0);
-  }
-  if (napred) {
+  set_motor(0,0,0,0);
+  if (levo || desno || napred) {
     set_motor(1, 0, 1, 0);
   }
   if (nazad) {
     set_motor(0, 1, 0, 1);
-    if(millis() - Time > PERIOD * 1000 / 2){
-      if(buzz){
-        tone(BUZZ, 450);
-        Time = millis();
-      }
-      else{
-        noTone(BUZZ);
-        Time = millis();
-      }
-      buzz = !buzz;
-    }
   }
 }
 
@@ -78,12 +69,28 @@ int get_Speed() {
 void set_Motor_Speed() {
   analogWrite(MOTOR_A_EN, get_Speed());
   analogWrite(MOTOR_B_EN, get_Speed());
-  if(levo) analogWrite(MOTOR_B_EN, 255);
-  if(desno) analogWrite(MOTOR_A_EN, 255);
+  if(levo) {
+    analogWrite(MOTOR_B_EN, 255);
+    analogWrite(MOTOR_A_EN, 127);
+  }
+  if(desno) {
+    analogWrite(MOTOR_A_EN, 255);
+    analogWrite(MOTOR_B_EN, 127);
+  }
 }
 
 void set_BUZZ() {
-  
+  if(millis() - Time > PERIOD * 1000 / 2){
+      if(buzz){
+        tone(BUZZ, 450);
+        Time = millis();
+      }
+      else{
+        noTone(BUZZ);
+        Time = millis();
+      }
+      buzz = !buzz;
+    }
 }
 
 void set_Effects() {
